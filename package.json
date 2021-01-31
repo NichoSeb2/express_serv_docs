@@ -1,0 +1,33 @@
+{
+	"name": "express_serv_docs",
+	"version": "1.0.0",
+	"description": "This is the repository of a simple npm package who serv swagger, erb and nyc docs but with custom css and js",
+	"main": "index.js",
+	"scripts": {},
+	"author": "Parnell \"NichoSeb2\" Polliotti",
+	"keywords": [
+		"express",
+		"docs",
+		"swagger",
+		"erb",
+		"erbuilder",
+		"nyc",
+		"nichoseb2"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NichoSeb2/express_serv_docs.git"
+	},
+	"bugs": {
+		"url": "https://github.com/NichoSeb2/express_serv_docs/issues"
+	},
+	"homepage": "https://github.com/NichoSeb2/express_serv_docs#readme",
+	"dependencies": {
+		"express": "^4.17.1",
+		"swagger-jsdoc": "^6.0.2",
+		"swagger-ui-express": "^4.1.6"
+	},
+	"devDependencies": {
+		"mocha": "^8.2.1"
+	}
+}
