@@ -50,6 +50,7 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
 	];
 
 	DATABASE_DOCS_FILE.forEach(file => {
+		console.log(__dirname + "/database/" + file);
 		app.use("/docs/database/" + file, express.static(__dirname + "/database/" + file));
 	});
 
@@ -81,6 +82,7 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
 	];
 
 	CODE_COVERAGE_FILE.forEach(file => {
+		console.log(__dirname + "/coverage/" + file);
 		app.use("/docs/coverage/" + file, express.static(__dirname + "/coverage/" + file));
 	});
 
