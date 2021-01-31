@@ -5,7 +5,7 @@ const fs = require("fs");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
+function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 	// * Favicon
 	app.get("/img/:img_src", (req, res) => {
 		switch(req.params.img_src) {
@@ -50,8 +50,8 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
 	];
 
 	DATABASE_DOCS_FILE.forEach(file => {
-		console.log(__dirname + "/database/" + file);
-		app.use("/docs/database/" + file, express.static(__dirname + "/database/" + file));
+		console.log(DIR_NAME + "/database/" + file);
+		app.use("/docs/database/" + file, express.static(DIR_NAME + "/database/" + file));
 	});
 
 	// Custom css and js injection
@@ -82,8 +82,8 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
 	];
 
 	CODE_COVERAGE_FILE.forEach(file => {
-		console.log(__dirname + "/coverage/" + file);
-		app.use("/docs/coverage/" + file, express.static(__dirname + "/coverage/" + file));
+		console.log(DIR_NAME + "/coverage/" + file);
+		app.use("/docs/coverage/" + file, express.static(DIR_NAME + "/coverage/" + file));
 	});
 
 	// Custom css and js injection into multiple html file
