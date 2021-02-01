@@ -49,6 +49,7 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 		"vendors/", 
 	];
 
+	console.log("DATABASE_DOCS_FILE : " + DATABASE_DOCS_FILE);
 	DATABASE_DOCS_FILE.forEach(file => {
 		app.use("/docs/database/" + file, express.static(DIR_NAME + "/database/" + file));
 	});
@@ -80,14 +81,17 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 		"sorter.js", 
 	];
 
+	console.log("CODE_COVERAGE_FILE : " + CODE_COVERAGE_FILE);
 	CODE_COVERAGE_FILE.forEach(file => {
 		app.use("/docs/coverage/" + file, express.static(DIR_NAME + "/coverage/" + file));
 	});
 
 	// Custom css and js injection into multiple html file
-	const COVERAGE_DIR = "./coverage";
+	console.log("COVERAGE_DIR : " + DIR_NAME + "/coverage");
+	const COVERAGE_DIR = DIR_NAME + "/coverage";
 
 	fs.readdir(COVERAGE_DIR, (err, files) => {
+		console.log("Files : " + files);
 		files.forEach(file => {
 			let extension = file.split(".");
 			extension = extension[extension.length - 1];
