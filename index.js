@@ -1,9 +1,40 @@
 const express = require("express");
 
 const fs = require("fs");
+const path = require("path");
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+
+function walk(dir, done) {
+	var results = [];
+
+	fs.readdir(dir, (err, list) => {
+		if(err) return done(err);
+
+		var i = 0;
+
+		(function next() {
+			var file = list[i++];
+
+			if(!file) return done(null, results);
+
+			file = path.resolve(dir, file);
+
+			fs.stat(file, (err, stat) => {
+				if(stat && stat.isDirectory()) {
+					walk(file, (err, res) => {
+						results = results.concat(res);
+						next();
+					});
+				} else {
+					results.push(file);
+					next();
+				}
+			});
+		})();
+	});
+}
 
 function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 	// * Favicon
@@ -85,15 +116,19 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 	});
 
 	// Custom css and js injection into multiple html file
-	const COVERAGE_DIR = DIR_NAME + "/coverage";
+	const COVERAGE_DIR = DIR_NAME + "\\coverage";
 
-	fs.readdir(COVERAGE_DIR, (err, files) => {
-		files.forEach(file => {
+	walk(COVERAGE_DIR, (err, files) => {
+		if(err) throw err;
+
+		files.forEach((file) => {
 			let extension = file.split(".");
 			extension = extension[extension.length - 1];
 
 			if(extension === "html") {
-				const route = "/docs/coverage/" + file;
+				file = file.replace(COVERAGE_DIR + "\\", "").replace("\\", "/").replace("\\", "/");
+
+				const ROUTE = "/docs/coverage/" + file;
 				const FILE_TO_RENDER = `../coverage/${file}`;
 
 				if(file === "index.html") {
@@ -115,7 +150,7 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 					});
 				}
 
-				app.get(route, (req, res) => {
+				app.get(ROUTE, (req, res) => {
 					res.render("coverage", {
 						STATIC_SERVER_BASE_URL, 
 						FILE_TO_RENDER,
