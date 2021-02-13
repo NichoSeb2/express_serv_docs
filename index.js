@@ -38,7 +38,11 @@ function walk(dir, done) {
 	});
 }
 
-function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
+function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes}) {
+	routes.forEach((route, index) => {
+		routes[index] = normalize(route);
+	});
+
 	const SWAGGER_OPTIONS = {
 		swaggerDefinition: {
 			info: {
@@ -47,7 +51,7 @@ function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version})
 				tags: API_TAGS, 
 			}
 		},
-		apis: ["./routes/*.js"]
+		apis: routes
 	};
 
 	const SWAGGER_UI_OPTIONS = {
@@ -163,21 +167,20 @@ function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 	});
 }
 
-function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
-	DIR_NAME = normalize(DIR_NAME);
-
+function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, routes}) {
 	// * Global Favicon
 	app.get("/img/:img_src", (req, res) => {
 		switch(req.params.img_src) {
 			case "favicon.png":
 			case "favicon-16x16.png":
 			case "favicon-32x32.png":
+				console.log(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
 				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
 				break;
 		}
 	});
 
-	registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version});
+	registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes});
 
 	registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version});
 

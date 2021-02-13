@@ -14,16 +14,14 @@ const API_TAGS = ["TEST"];
 
 const { name, version } = require("../package.json");
 
-const { registerSwagger, registerERB, registerNYC } = require("../index");
+const { registerDocs } = require("../index");
 
 describe("docs test", async  () => {
 	before(async () => {
 		app.set("views", path.join(__dirname, "/views"));
 		app.set("view engine", "ejs");
 
-		registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version});
-		registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME: path.join(__dirname, "../"), version});
-		registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME: path.join(__dirname, "../"), name, version});
+		registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME: path.join(__dirname, "../"), name, version, routes: [path.join(__dirname, "../routes/*.js")]});
 
 		app.use("/css/swagger.css", express.static(path.join(__dirname, "../test/css/sample.min.css")));
 		app.use("/js/swagger.js", express.static(path.join(__dirname, "../test/js/sample.js")));
@@ -45,7 +43,10 @@ describe("docs test", async  () => {
 		{label: "nyc access", route: "/docs/coverage"}, 
 		{label: "nyc css access", route: "/css/nyc.css"}, 
 		{label: "nyc js access", route: "/js/nyc.js"}, 
+		{label: "nyc extra file access", route: "/docs/coverage/sample/sample.html"}, 
 	];
+
+	console.log(STATIC_SERVER_BASE_URL + "/img/favicon-32x32.png");
 
 	check.forEach(el => {
 		it(el.label, async () => {
