@@ -46,8 +46,6 @@ describe("docs test", async  () => {
 		{label: "nyc extra file access", route: "/docs/coverage/sample/sample.html"}, 
 	];
 
-	console.log(STATIC_SERVER_BASE_URL + "/img/favicon-32x32.png");
-
 	check.forEach(el => {
 		it(el.label, async () => {
 			await axios.get(STATIC_SERVER_BASE_URL + el.route)

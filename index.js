@@ -174,7 +174,6 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 			case "favicon.png":
 			case "favicon-16x16.png":
 			case "favicon-32x32.png":
-				console.log(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
 				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
 				break;
 		}
