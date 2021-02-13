@@ -1,5 +1,7 @@
 const express = require("express");
 
+const normalize = require("normalize-path");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -36,19 +38,7 @@ function walk(dir, done) {
 	});
 }
 
-function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
-	// * Favicon
-	app.get("/img/:img_src", (req, res) => {
-		switch(req.params.img_src) {
-			case "favicon.png":
-			case "favicon-16x16.png":
-			case "favicon-32x32.png":
-				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
-				break;
-		}
-	});
-
-	// * API Docs
+function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version}) {
 	const SWAGGER_OPTIONS = {
 		swaggerDefinition: {
 			info: {
@@ -68,8 +58,11 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 	const SWAGGER_DOCS = swaggerJsDoc(SWAGGER_OPTIONS);
 
 	app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(SWAGGER_DOCS, SWAGGER_UI_OPTIONS));
+}
 
-	// * Database Docs
+function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
+	DIR_NAME = normalize(DIR_NAME);
+
 	// Base file
 	const DATABASE_DOCS_FILE = [
 		"build/", 
@@ -99,8 +92,11 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 	app.get("/docs/database", (req, res) => {
 		res.redirect("/docs/database/");
 	});
+}
 
-	// * Code Coverage
+function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
+	DIR_NAME = normalize(DIR_NAME);
+
 	// Base file
 	const CODE_COVERAGE_FILE = [
 		"base.css", 
@@ -116,20 +112,22 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 	});
 
 	// Custom css and js injection into multiple html file
-	const COVERAGE_DIR = DIR_NAME + "\\coverage";
+	const COVERAGE_DIR = DIR_NAME + "/coverage";
 
 	walk(COVERAGE_DIR, (err, files) => {
 		if(err) throw err;
 
 		files.forEach((file) => {
+			file = normalize(file);
+
 			let extension = file.split(".");
 			extension = extension[extension.length - 1];
 
 			if(extension === "html") {
-				file = file.replace(COVERAGE_DIR + "\\", "").replace("\\", "/").replace("\\", "/");
+				file = file.replace(COVERAGE_DIR + "/", "").replace("\\", "/").replace("\\", "/");
 
 				const ROUTE = "/docs/coverage/" + file;
-				const FILE_TO_RENDER = `../coverage/${file}`;
+				const FILE_TO_RENDER = `${COVERAGE_DIR}/${file}`;
 
 				if(file === "index.html") {
 					app.get("/docs/coverage/", (req, res, next) => {
@@ -165,4 +163,29 @@ function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, ve
 	});
 }
 
+function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
+	DIR_NAME = normalize(DIR_NAME);
+
+	// * Global Favicon
+	app.get("/img/:img_src", (req, res) => {
+		switch(req.params.img_src) {
+			case "favicon.png":
+			case "favicon-16x16.png":
+			case "favicon-32x32.png":
+				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
+				break;
+		}
+	});
+
+	registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version});
+
+	registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version});
+
+	registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version});
+}
+
 module.exports.registerDocs = registerDocs;
+
+module.exports.registerSwagger = registerSwagger;
+module.exports.registerERB = registerERB;
+module.exports.registerNYC = registerNYC;

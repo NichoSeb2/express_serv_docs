@@ -1,0 +1,7 @@
+<link rel="stylesheet" href="<%= STATIC_SERVER_BASE_URL %>/css/erb.css">
+<script src="<%= STATIC_SERVER_BASE_URL %>/js/erb.js"></script>
+<link rel="shortcut icon" type="image/x-icon" href="<%= STATIC_SERVER_BASE_URL %>/img/favicon.png">
+<%- include("../../database/index.html") %>
+<script>
+	hydrate("<%= custom.version %>");
+</script>

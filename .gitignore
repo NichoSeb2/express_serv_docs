@@ -1,2 +1,9 @@
-.github/**
+.vscode/**
+!.vscode/settings.json
+
+.nyc_output/**
+
 node_modules/**
+
+debug/**
+!debug/.empty

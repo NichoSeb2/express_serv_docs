@@ -1,0 +1,6 @@
+<%- include(FILE_TO_RENDER) %>
+<link rel="stylesheet" href="<%= STATIC_SERVER_BASE_URL %>/css/nyc.css">
+<script src="<%= STATIC_SERVER_BASE_URL %>/js/nyc.js"></script>
+<script>
+	hydrate("<%= custom.title %>", "<%= custom.version %>", "<%= STATIC_SERVER_BASE_URL %>/img/favicon.png");
+</script>
