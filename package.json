@@ -1,6 +1,6 @@
 {
 	"name": "express_serv_docs",
-	"version": "1.5.2",
+	"version": "1.5.3",
 	"description": "This is the repository of a simple npm package who serv swagger, erb and nyc docs but with custom css and js",
 	"main": "index.js",
 	"scripts": {
