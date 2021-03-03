@@ -43,6 +43,16 @@ function walk(dir, done) {
 function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes}) {
 	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
 
+	app.get("/img/:img_src", (req, res) => {
+		switch(req.params.img_src) {
+			case "favicon.png":
+			case "favicon-16x16.png":
+			case "favicon-32x32.png":
+				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
+				break;
+		}
+	});
+
 	routes.forEach((route, index) => {
 		routes[index] = normalize(route);
 	});
@@ -175,17 +185,6 @@ function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 }
 
 function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, routes}) {
-	// * Global Favicon
-	app.get("/img/:img_src", (req, res) => {
-		switch(req.params.img_src) {
-			case "favicon.png":
-			case "favicon-16x16.png":
-			case "favicon-32x32.png":
-				res.redirect(STATIC_SERVER_BASE_URL + "/img/" + req.params.img_src);
-				break;
-		}
-	});
-
 	registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes});
 
 	registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version});
