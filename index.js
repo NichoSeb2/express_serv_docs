@@ -2,6 +2,8 @@ const express = require("express");
 
 const normalize = require("normalize-path");
 
+const { unTrailingSlashIt } = require("trailing-slash-it");
+
 const fs = require("fs");
 const path = require("path");
 
@@ -39,6 +41,8 @@ function walk(dir, done) {
 }
 
 function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes}) {
+	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
+
 	routes.forEach((route, index) => {
 		routes[index] = normalize(route);
 	});
@@ -65,6 +69,7 @@ function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, 
 }
 
 function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
+	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
 	DIR_NAME = normalize(DIR_NAME);
 
 	// Base file
@@ -99,6 +104,8 @@ function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
 }
 
 function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
+	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
+
 	DIR_NAME = normalize(DIR_NAME);
 
 	// Base file

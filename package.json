@@ -28,7 +28,8 @@
 		"express": "^4.17.1",
 		"normalize-path": "^3.0.0",
 		"swagger-jsdoc": "^6.0.2",
-		"swagger-ui-express": "^4.1.6"
+		"swagger-ui-express": "^4.1.6",
+		"trailing-slash-it": "^0.3.0"
 	},
 	"devDependencies": {
 		"axios": "^0.21.1",

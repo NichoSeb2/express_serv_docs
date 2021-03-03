@@ -9,7 +9,7 @@ const app = express();
 const path = require("path");
 
 const PORT = 6900;
-const STATIC_SERVER_BASE_URL = `http://localhost:${PORT}`;
+const STATIC_SERVER_BASE_URL = `http://localhost:${PORT}/`;
 const API_TAGS = ["TEST"];
 
 const { name, version } = require("../package.json");
@@ -34,16 +34,16 @@ describe("docs test", async  () => {
 	});
 
 	const check = [
-		{label: "swagger access", route: "/docs/api"}, 
-		{label: "swagger css access", route: "/css/swagger.css"}, 
-		{label: "swagger js access", route: "/js/swagger.js"}, 
-		{label: "erb access", route: "/docs/database"}, 
-		{label: "erb css access", route: "/css/erb.css"}, 
-		{label: "erb js access", route: "/js/erb.js"}, 
-		{label: "nyc access", route: "/docs/coverage"}, 
-		{label: "nyc css access", route: "/css/nyc.css"}, 
-		{label: "nyc js access", route: "/js/nyc.js"}, 
-		{label: "nyc extra file access", route: "/docs/coverage/sample/sample.html"}, 
+		{label: "swagger access", route: "docs/api"}, 
+		{label: "swagger css access", route: "css/swagger.css"}, 
+		{label: "swagger js access", route: "js/swagger.js"}, 
+		{label: "erb access", route: "docs/database"}, 
+		{label: "erb css access", route: "css/erb.css"}, 
+		{label: "erb js access", route: "js/erb.js"}, 
+		{label: "nyc access", route: "docs/coverage"}, 
+		{label: "nyc css access", route: "css/nyc.css"}, 
+		{label: "nyc js access", route: "js/nyc.js"}, 
+		{label: "nyc extra file access", route: "docs/coverage/sample/sample.html"}, 
 	];
 
 	check.forEach(el => {
