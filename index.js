@@ -78,7 +78,7 @@ function registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, 
 	app.use("/docs/api", swaggerUi.serve, swaggerUi.setup(SWAGGER_DOCS, SWAGGER_UI_OPTIONS));
 }
 
-function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
+function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version, databaseView = "database"}) {
 	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
 	DIR_NAME = normalize(DIR_NAME);
 
@@ -100,7 +100,7 @@ function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
 	app.get("/docs/database/", (req, res, next) => {
 		if(req.originalUrl.slice(-1) != "/") return next();
 
-		res.render("database", {
+		res.render(databaseView, {
 			STATIC_SERVER_BASE_URL, 
 			custom: {
 				version
@@ -113,7 +113,7 @@ function registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version}) {
 	});
 }
 
-function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
+function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, coverageView = "coverage"}) {
 	STATIC_SERVER_BASE_URL = unTrailingSlashIt(STATIC_SERVER_BASE_URL);
 
 	DIR_NAME = normalize(DIR_NAME);
@@ -154,7 +154,7 @@ function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 					app.get("/docs/coverage/", (req, res, next) => {
 						if(req.originalUrl.slice(-1) != "/") return next();
 
-						res.render("coverage", {
+						res.render(coverageView, {
 							STATIC_SERVER_BASE_URL, 
 							FILE_TO_RENDER,
 							custom: {
@@ -170,7 +170,7 @@ function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 				}
 
 				app.get(ROUTE, (req, res) => {
-					res.render("coverage", {
+					res.render(coverageView, {
 						STATIC_SERVER_BASE_URL, 
 						FILE_TO_RENDER,
 						custom: {
@@ -184,12 +184,12 @@ function registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version}) {
 	});
 }
 
-function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, routes}) {
+function registerDocs({app, API_TAGS, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, routes, databaseView = "database", coverageView = "coverage"}) {
 	registerSwagger({app, API_TAGS, STATIC_SERVER_BASE_URL, name, version, routes});
 
-	registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version});
+	registerERB({app, STATIC_SERVER_BASE_URL, DIR_NAME, version, databaseView});
 
-	registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version});
+	registerNYC({app, STATIC_SERVER_BASE_URL, DIR_NAME, name, version, coverageView});
 }
 
 module.exports.registerDocs = registerDocs;
